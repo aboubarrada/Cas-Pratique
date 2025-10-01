@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeu de l'Oiseau Sauteur</title>
+    <title>🏍️ Jeu de Moto Racing</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(180deg, #87CEEB 0%, #98FB98 100%);
+            background: linear-gradient(180deg, #1e3c72 0%, #2a5298 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -24,101 +24,232 @@
         .game-container {
             position: relative;
             width: 800px;
-            height: 400px;
-            border: 3px solid #4a4a4a;
-            border-radius: 10px;
+            height: 600px;
+            border: 3px solid #333;
+            border-radius: 15px;
             overflow: hidden;
-            background: linear-gradient(180deg, #87CEEB 0%, #98FB98 70%, #228B22 100%);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            background: linear-gradient(180deg, #87CEEB 0%, #90EE90 50%, #228B22 100%);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
         }
 
-        .bird {
+        .road {
             position: absolute;
-            width: 40px;
-            height: 30px;
-            background: #FFD700;
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            left: 100px;
-            transition: transform 0.1s;
-            z-index: 10;
+            bottom: 0;
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(90deg, 
+                #404040 0%, #505050 20%, #404040 40%, 
+                #505050 60%, #404040 80%, #505050 100%);
         }
 
-        .bird::before {
-            content: '';
+        .road-line {
             position: absolute;
             width: 8px;
-            height: 8px;
-            background: #000;
-            border-radius: 50%;
-            top: 8px;
-            right: 8px;
+            height: 60px;
+            background: #FFD700;
+            border-radius: 4px;
+            animation: moveRoad 0.5s linear infinite;
         }
 
-        .bird::after {
-            content: '';
-            position: absolute;
-            width: 15px;
-            height: 8px;
-            background: #FF6347;
-            border-radius: 0 50% 50% 0;
-            top: 12px;
-            right: -5px;
+        @keyframes moveRoad {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(60px); }
         }
+
+        .motorcycle {
+            position: absolute;
+            width: 60px;
+            height: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 50px;
+            z-index: 100;
+            transition: left 0.1s;
+        }
+
+        .bike-body {
+            position: absolute;
+            width: 40px;
+            height: 80px;
+            background: linear-gradient(45deg, #FF0000, #CC0000);
+            border-radius: 15px;
+            left: 10px;
+            bottom: 10px;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .bike-wheel {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #333;
+            border-radius: 50%;
+            border: 3px solid #666;
+            animation: spin 0.3s linear infinite;
+        }
+
+        .bike-wheel.front {
+            bottom: 5px;
+            left: 35px;
+        }
+
+        .bike-wheel.rear {
+            bottom: 5px;
+            left: 5px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .rider {
+            position: absolute;
+            width: 25px;
+            height: 40px;
+            background: #000080;
+            border-radius: 15px 15px 5px 5px;
+            left: 17px;
+            bottom: 50px;
+        }
+
+        .helmet {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #FFD700;
+            border-radius: 50%;
+            top: -15px;
+            left: 2px;
+            border: 2px solid #FFA500;
+        }
+
+        .enemy-car {
+            position: absolute;
+            width: 50px;
+            height: 80px;
+            background: linear-gradient(45deg, #800080, #4B0082);
+            border-radius: 10px;
+            z-index: 50;
+            border: 2px solid #333;
+        }
+
+        .car-window {
+            position: absolute;
+            width: 35px;
+            height: 20px;
+            background: rgba(135, 206, 235, 0.8);
+            border-radius: 5px;
+            left: 7px;
+            top: 15px;
+        }
+
+        .car-wheel {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #333;
+            border-radius: 50%;
+            border: 1px solid #666;
+        }
+
+        .car-wheel.front-left { bottom: 5px; left: 2px; }
+        .car-wheel.front-right { bottom: 5px; right: 2px; }
+        .car-wheel.rear-left { top: 5px; left: 2px; }
+        .car-wheel.rear-right { top: 5px; right: 2px; }
 
         .obstacle {
             position: absolute;
-            width: 60px;
+            width: 40px;
+            height: 40px;
             background: #8B4513;
-            border-radius: 5px;
-            border: 2px solid #654321;
+            border-radius: 50%;
+            border: 3px solid #654321;
+            z-index: 30;
         }
 
-        .cloud {
+        .tree {
             position: absolute;
-            width: 60px;
-            height: 30px;
-            background: white;
-            border-radius: 50px;
-            opacity: 0.7;
-            animation: float 6s ease-in-out infinite;
+            width: 30px;
+            height: 120px;
+            z-index: 20;
         }
 
-        .cloud::before {
-            content: '';
+        .tree-trunk {
+            position: absolute;
+            width: 8px;
+            height: 60px;
+            background: #8B4513;
+            border-radius: 4px;
+            left: 11px;
+            bottom: 0;
+        }
+
+        .tree-crown {
             position: absolute;
             width: 30px;
             height: 30px;
-            background: white;
+            background: #228B22;
             border-radius: 50%;
-            left: 10px;
-            top: -10px;
+            top: 30px;
+            animation: sway 3s ease-in-out infinite;
         }
 
-        .cloud::after {
-            content: '';
+        @keyframes sway {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(2deg); }
+        }
+
+        .speedometer {
             position: absolute;
-            width: 40px;
-            height: 30px;
-            background: white;
+            top: 20px;
+            right: 20px;
+            width: 100px;
+            height: 100px;
+            border: 3px solid #333;
             border-radius: 50%;
-            right: 5px;
-            top: -8px;
+            background: radial-gradient(circle, #f0f0f0, #ddd);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+        .speed-needle {
+            position: absolute;
+            width: 2px;
+            height: 35px;
+            background: #FF0000;
+            border-radius: 1px;
+            transform-origin: bottom center;
+            transition: transform 0.3s;
         }
 
-        .score {
+        .hud {
             position: absolute;
             top: 20px;
             left: 20px;
-            font-size: 24px;
+            z-index: 1000;
+            color: white;
             font-weight: bold;
-            color: #333;
-            z-index: 100;
-            text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .score {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .distance {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .level {
+            font-size: 16px;
+            color: #FFD700;
         }
 
         .game-over {
@@ -127,33 +258,38 @@
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
-            background: rgba(0,0,0,0.8);
+            background: linear-gradient(45deg, rgba(0,0,0,0.9), rgba(50,50,50,0.9));
             color: white;
-            padding: 30px;
-            border-radius: 15px;
+            padding: 40px;
+            border-radius: 20px;
             z-index: 1000;
             display: none;
+            border: 3px solid #FF0000;
+            box-shadow: 0 10px 30px rgba(255,0,0,0.3);
         }
 
         .game-over h2 {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             color: #FF6B6B;
+            font-size: 28px;
         }
 
         .game-over button {
-            background: #4ECDC4;
+            background: linear-gradient(45deg, #FF6B6B, #FF4757);
             border: none;
-            padding: 10px 20px;
+            padding: 12px 25px;
             border-radius: 25px;
             color: white;
             font-size: 16px;
             cursor: pointer;
             margin-top: 15px;
-            transition: background 0.3s;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255,107,107,0.3);
         }
 
         .game-over button:hover {
-            background: #45B7B8;
+            background: linear-gradient(45deg, #FF4757, #FF3742);
+            transform: translateY(-2px);
         }
 
         .instructions {
@@ -162,9 +298,12 @@
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
-            color: #333;
+            color: white;
             font-size: 16px;
-            text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.5);
+            padding: 10px 20px;
+            border-radius: 15px;
         }
 
         .start-screen {
@@ -173,7 +312,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(135, 206, 235, 0.95);
+            background: linear-gradient(135deg, rgba(30,60,114,0.95), rgba(42,82,152,0.95));
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -182,25 +321,71 @@
         }
 
         .start-screen h1 {
-            color: #333;
+            color: white;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+            font-size: 36px;
         }
 
         .start-button {
-            background: #FF6B6B;
+            background: linear-gradient(45deg, #FF6B6B, #FF4757);
             border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
+            padding: 18px 35px;
+            border-radius: 30px;
             color: white;
-            font-size: 18px;
+            font-size: 20px;
             cursor: pointer;
-            transition: background 0.3s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px rgba(255,107,107,0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .start-button:hover {
-            background: #FF5252;
+            background: linear-gradient(45deg, #FF4757, #FF3742);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(255,107,107,0.6);
+        }
+
+        .nitro-bar {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 200px;
+            height: 20px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 10px;
+            border: 2px solid #333;
+            overflow: hidden;
+        }
+
+        .nitro-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00FF00, #32CD32);
+            width: 100%;
+            transition: width 0.3s;
+            border-radius: 8px;
+        }
+
+        .explosion {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #FF4500, #FF6347, transparent);
+            border-radius: 50%;
+            animation: explode 0.5s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes explode {
+            0% { 
+                transform: scale(0.1);
+                opacity: 1;
+            }
+            100% { 
+                transform: scale(3);
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -208,192 +393,307 @@
     <div class="game-container" id="gameContainer">
         <!-- Écran de démarrage -->
         <div class="start-screen" id="startScreen">
-            <h1>🐦 Jeu de l'Oiseau Sauteur 🐦</h1>
-            <p style="margin-bottom: 20px; color: #333;">Cliquez ou appuyez sur ESPACE pour faire sauter l'oiseau !</p>
-            <button class="start-button" onclick="startGame()">Commencer le Jeu</button>
+            <h1>🏍️ MOTO RACING EXTREME 🏍️</h1>
+            <p style="margin-bottom: 30px; color: white; font-size: 18px;">Utilisez les flèches ←→ pour éviter les obstacles !</p>
+            <button class="start-button" onclick="startGame()">🏁 DÉMARRER LA COURSE 🏁</button>
         </div>
 
-        <!-- Nuages décoratifs -->
-        <div class="cloud" style="top: 30px; left: 200px; animation-delay: 0s;"></div>
-        <div class="cloud" style="top: 60px; left: 500px; animation-delay: 2s;"></div>
-        <div class="cloud" style="top: 40px; left: 700px; animation-delay: 4s;"></div>
+        <!-- Route -->
+        <div class="road" id="road"></div>
 
-        <!-- Oiseau -->
-        <div class="bird" id="bird"></div>
+        <!-- Moto du joueur -->
+        <div class="motorcycle" id="motorcycle">
+            <div class="rider">
+                <div class="helmet"></div>
+            </div>
+            <div class="bike-body"></div>
+            <div class="bike-wheel front"></div>
+            <div class="bike-wheel rear"></div>
+        </div>
 
-        <!-- Score -->
-        <div class="score" id="score">Score: 0</div>
+        <!-- HUD (Interface utilisateur) -->
+        <div class="hud">
+            <div class="score" id="score">Score: 0</div>
+            <div class="distance" id="distance">Distance: 0m</div>
+            <div class="level" id="level">Niveau: 1</div>
+        </div>
+
+        <!-- Compteur de vitesse -->
+        <div class="speedometer">
+            <div class="speed-needle" id="speedNeedle"></div>
+            <div>
+                <div style="font-size: 12px;">KM/H</div>
+                <div id="speedValue">0</div>
+            </div>
+        </div>
+
+        <!-- Barre de nitro -->
+        <div class="nitro-bar">
+            <div class="nitro-fill" id="nitroFill"></div>
+        </div>
+        <div style="position: absolute; bottom: 45px; right: 20px; color: white; font-size: 12px; text-shadow: 1px 1px 2px black;">
+            NITRO (Maintenez N)
+        </div>
 
         <!-- Instructions -->
         <div class="instructions">
-            Cliquez ou appuyez sur ESPACE pour sauter !
+            🏍️ Flèches ←→ pour bouger | N pour le nitro | Évitez les obstacles !
         </div>
 
         <!-- Écran de fin de jeu -->
         <div class="game-over" id="gameOver">
-            <h2>🚫 Game Over ! 🚫</h2>
-            <p>Score final: <span id="finalScore">0</span></p>
-            <button onclick="restartGame()">Rejouer</button>
+            <h2>� CRASH ! GAME OVER ! �</h2>
+            <p style="margin: 10px 0;">Score final: <span id="finalScore">0</span></p>
+            <p style="margin: 10px 0;">Distance parcourue: <span id="finalDistance">0</span>m</p>
+            <p style="margin: 10px 0;">Niveau atteint: <span id="finalLevel">1</span></p>
+            <button onclick="restartGame()">🔄 REJOUER</button>
         </div>
     </div>
 
     <script>
         let gameStarted = false;
         let gameRunning = false;
-        let birdY = 200;
-        let birdVelocity = 0;
+        let motorcycleX = 400; // Position horizontale de la moto
         let obstacles = [];
+        let trees = [];
+        let roadLines = [];
         let score = 0;
-        let gameSpeed = 2;
+        let distance = 0;
+        let level = 1;
+        let gameSpeed = 5;
         let obstacleFrequency = 0;
+        let treeFrequency = 0;
+        let roadLineFrequency = 0;
+        let nitro = 100;
+        let isNitroActive = false;
+        let keys = {};
 
-        const bird = document.getElementById('bird');
+        // Éléments DOM
+        const motorcycle = document.getElementById('motorcycle');
         const gameContainer = document.getElementById('gameContainer');
         const scoreElement = document.getElementById('score');
+        const distanceElement = document.getElementById('distance');
+        const levelElement = document.getElementById('level');
         const gameOverScreen = document.getElementById('gameOver');
         const startScreen = document.getElementById('startScreen');
         const finalScoreElement = document.getElementById('finalScore');
+        const finalDistanceElement = document.getElementById('finalDistance');
+        const finalLevelElement = document.getElementById('finalLevel');
+        const speedNeedle = document.getElementById('speedNeedle');
+        const speedValue = document.getElementById('speedValue');
+        const nitroFill = document.getElementById('nitroFill');
+        const road = document.getElementById('road');
 
         // Constantes du jeu
-        const GRAVITY = 0.5;
-        const JUMP_FORCE = -12;
-        const OBSTACLE_WIDTH = 60;
-        const OBSTACLE_GAP = 120;
-        const BIRD_SIZE = 30;
+        const MOTORCYCLE_SPEED = 8;
+        const NITRO_SPEED = 15;
+        const ROAD_WIDTH = 400;
+        const LANES = 5;
+        const LANE_WIDTH = ROAD_WIDTH / LANES;
 
         function startGame() {
             startScreen.style.display = 'none';
             gameStarted = true;
             gameRunning = true;
             resetGame();
+            createInitialRoadLines();
             gameLoop();
         }
 
         function resetGame() {
-            birdY = 200;
-            birdVelocity = 0;
+            motorcycleX = 400;
             obstacles = [];
+            trees = [];
+            roadLines = [];
             score = 0;
-            gameSpeed = 2;
+            distance = 0;
+            level = 1;
+            gameSpeed = 5;
             obstacleFrequency = 0;
-            updateScore();
-            updateBirdPosition();
+            treeFrequency = 0;
+            roadLineFrequency = 0;
+            nitro = 100;
+            isNitroActive = false;
             
-            // Supprimer tous les obstacles existants
-            const existingObstacles = document.querySelectorAll('.obstacle');
-            existingObstacles.forEach(obstacle => obstacle.remove());
+            updateHUD();
+            updateMotorcyclePosition();
+            
+            // Supprimer tous les éléments existants
+            document.querySelectorAll('.enemy-car, .obstacle, .tree, .road-line, .explosion').forEach(el => el.remove());
         }
 
-        function jump() {
-            if (gameRunning) {
-                birdVelocity = JUMP_FORCE;
+        function createInitialRoadLines() {
+            for (let i = 0; i < 10; i++) {
+                createRoadLine(i * 70);
             }
         }
 
-        function updateBirdPosition() {
-            bird.style.top = birdY + 'px';
+        function createRoadLine(y = 600) {
+            const line = document.createElement('div');
+            line.className = 'road-line';
+            line.style.left = '396px'; // Centre de la route
+            line.style.top = y + 'px';
+            gameContainer.appendChild(line);
+            roadLines.push({ element: line, y: y });
+        }
+
+        function updateMotorcyclePosition() {
+            // Limiter la moto aux limites de la route
+            motorcycleX = Math.max(200, Math.min(600, motorcycleX));
+            motorcycle.style.left = motorcycleX + 'px';
+        }
+
+        function createEnemyCar() {
+            const car = document.createElement('div');
+            car.className = 'enemy-car';
             
-            // Rotation de l'oiseau selon la vélocité
-            const rotation = Math.max(-30, Math.min(30, birdVelocity * 2));
-            bird.style.transform = `rotate(${rotation}deg)`;
+            // Créer les détails de la voiture
+            car.innerHTML = `
+                <div class="car-window"></div>
+                <div class="car-wheel front-left"></div>
+                <div class="car-wheel front-right"></div>
+                <div class="car-wheel rear-left"></div>
+                <div class="car-wheel rear-right"></div>
+            `;
+            
+            // Position aléatoire sur une des voies
+            const lanes = [220, 300, 380, 460, 540];
+            const laneX = lanes[Math.floor(Math.random() * lanes.length)];
+            car.style.left = laneX + 'px';
+            car.style.top = '600px';
+            
+            // Couleurs aléatoires
+            const colors = ['#800080', '#FF6347', '#4169E1', '#32CD32', '#FFD700'];
+            car.style.background = `linear-gradient(45deg, ${colors[Math.floor(Math.random() * colors.length)]}, #333)`;
+            
+            gameContainer.appendChild(car);
+            obstacles.push({ element: car, x: laneX, y: 600, type: 'car' });
         }
 
         function createObstacle() {
             const obstacle = document.createElement('div');
             obstacle.className = 'obstacle';
             
-            const gapPosition = Math.random() * (300 - OBSTACLE_GAP) + 50;
-            const topHeight = gapPosition;
-            const bottomHeight = 400 - gapPosition - OBSTACLE_GAP;
+            const lanes = [220, 300, 380, 460, 540];
+            const laneX = lanes[Math.floor(Math.random() * lanes.length)];
+            obstacle.style.left = laneX + 'px';
+            obstacle.style.top = '600px';
             
-            // Obstacle du haut
-            const topObstacle = obstacle.cloneNode();
-            topObstacle.style.height = topHeight + 'px';
-            topObstacle.style.top = '0px';
-            topObstacle.style.right = '0px';
+            gameContainer.appendChild(obstacle);
+            obstacles.push({ element: obstacle, x: laneX, y: 600, type: 'rock' });
+        }
+
+        function createTree() {
+            const tree = document.createElement('div');
+            tree.className = 'tree';
+            tree.innerHTML = `
+                <div class="tree-crown"></div>
+                <div class="tree-trunk"></div>
+            `;
             
-            // Obstacle du bas
-            const bottomObstacle = obstacle.cloneNode();
-            bottomObstacle.style.height = bottomHeight + 'px';
-            bottomObstacle.style.bottom = '0px';
-            bottomObstacle.style.right = '0px';
+            const side = Math.random() > 0.5 ? 'left' : 'right';
+            tree.style[side] = Math.random() * 100 + 'px';
+            tree.style.top = '600px';
             
-            gameContainer.appendChild(topObstacle);
-            gameContainer.appendChild(bottomObstacle);
-            
-            obstacles.push({
-                top: topObstacle,
-                bottom: bottomObstacle,
-                x: 800,
-                passed: false
-            });
+            gameContainer.appendChild(tree);
+            trees.push({ element: tree, y: 600 });
         }
 
         function updateObstacles() {
+            const currentSpeed = isNitroActive ? gameSpeed + 8 : gameSpeed;
+            
+            // Mettre à jour les voitures ennemies et obstacles
             for (let i = obstacles.length - 1; i >= 0; i--) {
                 const obstacle = obstacles[i];
-                obstacle.x -= gameSpeed;
+                obstacle.y -= currentSpeed;
+                obstacle.element.style.top = obstacle.y + 'px';
                 
-                obstacle.top.style.right = (800 - obstacle.x) + 'px';
-                obstacle.bottom.style.right = (800 - obstacle.x) + 'px';
-                
-                // Vérifier si l'obstacle est passé pour augmenter le score
-                if (!obstacle.passed && obstacle.x + OBSTACLE_WIDTH < 100) {
-                    obstacle.passed = true;
-                    score++;
-                    updateScore();
-                    
-                    // Augmenter la difficulté
-                    if (score % 5 === 0) {
-                        gameSpeed += 0.5;
-                    }
-                }
-                
-                // Supprimer les obstacles qui sont sortis de l'écran
-                if (obstacle.x + OBSTACLE_WIDTH < 0) {
-                    obstacle.top.remove();
-                    obstacle.bottom.remove();
+                // Supprimer si hors écran
+                if (obstacle.y < -100) {
+                    obstacle.element.remove();
                     obstacles.splice(i, 1);
+                    score += 10;
+                    continue;
                 }
                 
-                // Vérifier les collisions
+                // Vérifier collision
                 if (checkCollision(obstacle)) {
+                    createExplosion(motorcycleX, 500);
                     gameOver();
                     return;
+                }
+            }
+            
+            // Mettre à jour les arbres
+            for (let i = trees.length - 1; i >= 0; i--) {
+                const tree = trees[i];
+                tree.y -= currentSpeed;
+                tree.element.style.top = tree.y + 'px';
+                
+                if (tree.y < -120) {
+                    tree.element.remove();
+                    trees.splice(i, 1);
+                }
+            }
+            
+            // Mettre à jour les lignes de route
+            for (let i = roadLines.length - 1; i >= 0; i--) {
+                const line = roadLines[i];
+                line.y -= currentSpeed;
+                line.element.style.top = line.y + 'px';
+                
+                if (line.y < -60) {
+                    line.element.remove();
+                    roadLines.splice(i, 1);
                 }
             }
         }
 
         function checkCollision(obstacle) {
-            const birdLeft = 100;
-            const birdRight = 100 + 40;
-            const birdTop = birdY;
-            const birdBottom = birdY + BIRD_SIZE;
+            const motoLeft = motorcycleX;
+            const motoRight = motorcycleX + 60;
+            const motoTop = 450;
+            const motoBottom = 550;
             
-            const obstacleLeft = obstacle.x;
-            const obstacleRight = obstacle.x + OBSTACLE_WIDTH;
+            const obsLeft = obstacle.x;
+            const obsRight = obstacle.x + (obstacle.type === 'car' ? 50 : 40);
+            const obsTop = obstacle.y;
+            const obsBottom = obstacle.y + (obstacle.type === 'car' ? 80 : 40);
             
-            // Vérifier si l'oiseau est dans la zone horizontale de l'obstacle
-            if (birdRight > obstacleLeft && birdLeft < obstacleRight) {
-                const topObstacleHeight = parseInt(obstacle.top.style.height);
-                const bottomObstacleTop = 400 - parseInt(obstacle.bottom.style.height);
-                
-                // Vérifier les collisions avec les obstacles du haut et du bas
-                if (birdTop < topObstacleHeight || birdBottom > bottomObstacleTop) {
-                    return true;
-                }
-            }
-            
-            return false;
+            return motoLeft < obsRight && motoRight > obsLeft && 
+                   motoTop < obsBottom && motoBottom > obsTop;
         }
 
-        function updateScore() {
+        function createExplosion(x, y) {
+            const explosion = document.createElement('div');
+            explosion.className = 'explosion';
+            explosion.style.left = (x - 50) + 'px';
+            explosion.style.top = (y - 50) + 'px';
+            gameContainer.appendChild(explosion);
+            
+            setTimeout(() => explosion.remove(), 500);
+        }
+
+        function updateHUD() {
             scoreElement.textContent = `Score: ${score}`;
+            distanceElement.textContent = `Distance: ${Math.floor(distance/10)}m`;
+            levelElement.textContent = `Niveau: ${level}`;
+            
+            const speed = isNitroActive ? gameSpeed + 8 : gameSpeed;
+            speedValue.textContent = Math.floor(speed * 10);
+            speedNeedle.style.transform = `rotate(${Math.min(180, speed * 15)}deg)`;
+            
+            nitroFill.style.width = nitro + '%';
+            nitroFill.style.background = nitro > 20 ? 
+                'linear-gradient(90deg, #00FF00, #32CD32)' : 
+                'linear-gradient(90deg, #FF4500, #FF6347)';
         }
 
         function gameOver() {
             gameRunning = false;
             finalScoreElement.textContent = score;
+            finalDistanceElement.textContent = Math.floor(distance/10);
+            finalLevelElement.textContent = level;
             gameOverScreen.style.display = 'block';
         }
 
@@ -401,33 +701,56 @@
             gameOverScreen.style.display = 'none';
             gameRunning = true;
             resetGame();
+            createInitialRoadLines();
         }
 
         function gameLoop() {
             if (!gameRunning) return;
             
-            // Mise à jour de la physique de l'oiseau
-            birdVelocity += GRAVITY;
-            birdY += birdVelocity;
+            distance++;
             
-            // Vérifier les limites de l'écran
-            if (birdY > 370) {
-                birdY = 370;
-                gameOver();
-                return;
-            } else if (birdY < 0) {
-                birdY = 0;
-                birdVelocity = 0;
+            // Augmenter le niveau et la difficulté
+            const newLevel = Math.floor(distance / 500) + 1;
+            if (newLevel > level) {
+                level = newLevel;
+                gameSpeed += 1;
             }
             
-            updateBirdPosition();
-            updateObstacles();
+            // Gérer le nitro
+            if (isNitroActive && nitro > 0) {
+                nitro -= 0.5;
+                if (nitro <= 0) {
+                    nitro = 0;
+                    isNitroActive = false;
+                }
+            } else if (!isNitroActive && nitro < 100) {
+                nitro += 0.2;
+            }
             
-            // Créer de nouveaux obstacles
+            updateObstacles();
+            updateHUD();
+            
+            // Créer de nouveaux éléments
             obstacleFrequency++;
-            if (obstacleFrequency > 90) {
-                createObstacle();
+            if (obstacleFrequency > 60 - level * 5) {
+                if (Math.random() > 0.3) {
+                    createEnemyCar();
+                } else {
+                    createObstacle();
+                }
                 obstacleFrequency = 0;
+            }
+            
+            treeFrequency++;
+            if (treeFrequency > 80) {
+                createTree();
+                treeFrequency = 0;
+            }
+            
+            roadLineFrequency++;
+            if (roadLineFrequency > 15) {
+                createRoadLine();
+                roadLineFrequency = 0;
             }
             
             requestAnimationFrame(gameLoop);
@@ -435,27 +758,55 @@
 
         // Contrôles
         document.addEventListener('keydown', function(event) {
-            if (event.code === 'Space') {
-                event.preventDefault();
-                if (!gameStarted) {
-                    startGame();
-                } else {
-                    jump();
+            keys[event.code] = true;
+            
+            if (gameRunning) {
+                switch(event.code) {
+                    case 'ArrowLeft':
+                        event.preventDefault();
+                        motorcycleX -= MOTORCYCLE_SPEED;
+                        updateMotorcyclePosition();
+                        break;
+                    case 'ArrowRight':
+                        event.preventDefault();
+                        motorcycleX += MOTORCYCLE_SPEED;
+                        updateMotorcyclePosition();
+                        break;
+                    case 'KeyN':
+                        event.preventDefault();
+                        if (nitro > 20) {
+                            isNitroActive = true;
+                        }
+                        break;
                 }
             }
         });
 
-        document.addEventListener('click', function() {
-            if (!gameStarted) {
-                startGame();
-            } else {
-                jump();
+        document.addEventListener('keyup', function(event) {
+            keys[event.code] = false;
+            
+            if (event.code === 'KeyN') {
+                isNitroActive = false;
             }
         });
 
-        // Empêcher le défilement de la page avec la barre d'espace
+        // Contrôles continus
+        setInterval(() => {
+            if (gameRunning) {
+                if (keys['ArrowLeft']) {
+                    motorcycleX -= MOTORCYCLE_SPEED;
+                    updateMotorcyclePosition();
+                }
+                if (keys['ArrowRight']) {
+                    motorcycleX += MOTORCYCLE_SPEED;
+                    updateMotorcyclePosition();
+                }
+            }
+        }, 16);
+
+        // Empêcher le défilement avec les flèches
         window.addEventListener('keydown', function(e) {
-            if (e.keyCode === 32 && e.target === document.body) {
+            if(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].indexOf(e.code) > -1) {
                 e.preventDefault();
             }
         });
